@@ -1,11 +1,14 @@
 # CSE221_System_Measurements
 
 ## Files:			
-cpu_system_call_running_application.c  
+1. cpu_system_call_running_application.c  
+    system call overhead
 ### Memory experiments
-test.c
-cartographer.c  
-jumper.c    
+1. jumper.c
+    For memory latency
+2. test.c  
+    memory bandwidth
+3. cartographer.c  
+    page fault latency
 
-mapme.mapper
                            
