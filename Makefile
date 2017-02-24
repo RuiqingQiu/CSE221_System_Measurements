@@ -1,7 +1,9 @@
 CFLAGS=-O0
-ALL=jumper cartographer loopy main test cpu_system_call_running_application
+ALL=jumper cartographer loopy test cpu_system_call_running_application proc_call_0 main
 
 all: $(ALL)
+
+proc_call_0: proc_call_0.o
 
 test: test.o
 
