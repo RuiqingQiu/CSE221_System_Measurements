@@ -25,7 +25,7 @@ int main()
 
     CPUID;
     RDTSC(pre);
-    f0();
+    f6(1, 1, 1, 1, 1, 1);
     RDTSCP(post);
     CPUID;
 
