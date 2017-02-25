@@ -1,6 +1,6 @@
 # CSE221_System_Measurements
 
-## Files:			
+## Files:
 
 ### CPU experiments
 1. cpu\_system\_call\_running\_application.c  (system call overhead)
@@ -23,6 +23,10 @@
 
 1. proc\_call\_7.c (seven argument function overhead)
 
+1. forkme.c (process creation and run time)
+
+1. get\_thready.c (kernel thread creation and run time)
+
 ### Memory experiments
 1. jumper.c (memory latency)
 
@@ -32,4 +36,7 @@
 
 ### Other
 1. run\_test.sh (convenience script for running a file multiple times)
+
+1. rds.h (header file containing macros for RDTSC, RDTSCP, and CPUID 
+instructions)
 
