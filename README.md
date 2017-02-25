@@ -29,6 +29,8 @@
 
 1. forcontext.c (process context switch time)
 
+1. thread\_context.c (kernel thread context switch time)
+
 ### Memory experiments
 1. jumper.c (memory latency)
 
