@@ -3,6 +3,8 @@
 ## Files:
 
 ### CPU experiments
+1. measure.c (rdtsc instruction overhead) 
+
 1. cpu\_system\_call\_running\_application.c  (system call overhead)
 
 1. loopy.c (loop overhead)
