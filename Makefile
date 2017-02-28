@@ -4,4 +4,4 @@ ALL=jumper cartographer loopy test cpu_system_call_running_application proc_call
 all: $(ALL)
 
 clean: 
-	rm -f *.o a.out $(ALL)
+	rm -f *.o a.out $(ALL) *.pf
