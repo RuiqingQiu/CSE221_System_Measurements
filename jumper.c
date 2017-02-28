@@ -49,7 +49,7 @@ int main()
   {
       CPUID;
       RDTSC(pre);
-      current_spot = (void**) (*current_spot);
+      (*current_spot);
       RDTSCP(post);
       CPUID;
       diff = post - pre;

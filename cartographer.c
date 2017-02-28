@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     int fd = 0;
     uint8_t * data_addr = NULL;
 
-    fd = open(argv[1], O_RDWR);
+    fd = open(OUR_FILE, O_RDWR);
     data_addr = mmap(0, pagesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     CPUID;
     RDTSC(pre);
