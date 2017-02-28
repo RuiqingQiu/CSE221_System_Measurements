@@ -43,57 +43,49 @@ double get_diff_in_msec(struct timeval start, struct timeval stop)
  */
 int main()
 {
-  printf("Beginning writes.\n");
   uint64_t pre, post, diff;
   struct timespec write_pre, write_post, read_pre, read_post;
   double write_diff, read_diff;
   double write_ratio, read_ratio;
-  struct timeval stop, start;
-  double loop_time;
+  //struct timeval stop, start;
+  unsigned long stop, start;
+  unsigned long loop_time = 18438;
   uint64_t i;
   uint64_t j;
-  double avg_loop = 0;
+  /*
+  unsigned long avg_loop = 0;
   for (i =0; i < NUM_LOOPS; ++i)
   {
-      gettimeofday(&start, NULL);
+      start = clock();
       for(j = 0; j < TOTAL_LEN; j++) {}
-      gettimeofday(&stop, NULL);
-      loop_time = get_diff_in_msec(start, stop);
+      stop = clock();
+      loop_time = (stop-start);
       avg_loop += loop_time;
   }
   avg_loop /= NUM_LOOPS;
-  printf("Average loop time in msec:\n%f\n", avg_loop);
-
-  gettimeofday(&start, NULL);
+  printf("%lu\n",avg_loop);
+  return 0;
+  */
+  start = clock();
   for (i = 0; i < TOTAL_LEN; ++i)
   {
-    bigmem[i] = 17;
+      bigmem[i] = 17;
   }
-  gettimeofday(&stop, NULL);
-  diff = post - pre;
-  write_diff = get_diff_in_msec(start, stop);
-  if (loop_time > write_diff)
-  {
-      printf("Warning: loop_time (%f) is greater than write_diff (%f)\n", loop_time, write_diff);
-  }
-  write_diff = (write_diff - loop_time);
+  stop = clock();
+  write_diff = (stop-start)  - loop_time;
   write_ratio = (double) TOTAL_LEN / write_diff;
-  printf("Write time in msec:\n%f\n", write_diff);
   printf("Write byte/msec:\n%f\n", write_ratio);
-
-  printf("\n\nBeginning reads.\n");
   uint64_t sum = 0;
 
-  gettimeofday(&start, NULL);
+  start = clock();
   for (uint64_t i = 0; i < TOTAL_LEN; ++i)
   {
-    sum = bigmem[i];
+      sum = bigmem[i];
   }
 
-  gettimeofday(&stop, NULL);
-  read_diff = get_diff_in_msec(start, stop) - loop_time;
+  stop = clock();
+  read_diff = (stop-start)  - loop_time;
   read_ratio = TOTAL_LEN / read_diff;
-  printf("Read time in msec:\n%f\n", read_diff);
   printf("Read byte/msec:\n%f\n", read_ratio);
   return 0;
 }

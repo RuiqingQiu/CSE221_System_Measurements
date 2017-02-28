@@ -33,7 +33,7 @@ double get_diff_in_msec(struct timeval start, struct timeval stop)
     return total;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     uint64_t pre, post, diff;
     uint64_t i;
@@ -45,7 +45,7 @@ int main()
     int fd = 0;
     uint8_t * data_addr = NULL;
 
-    fd = open(OUR_FILE, O_RDWR);
+    fd = open(argv[1], O_RDWR);
     data_addr = mmap(0, pagesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     CPUID;
     RDTSC(pre);
