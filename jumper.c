@@ -13,48 +13,59 @@ static uint64_t _lo, _hi;
 
 // roughly 1GB
 // cache sizes, so I'm going to say go with the lmbench paper.
-#define TOTAL_LEN (8000000 / sizeof(void*))
-#define NUM_LOOPS 100
-#define NUM_PTRS 100000
-#define STRIDE_SIZE 67
+#define NUM_LOOPS 100000
+#define STRIDE_SIZE 1
+// Array size, 8000 = 8000 bytes
+#define ARRAY_SIZE (800000000 / sizeof(int))
 
-void* bigmem[TOTAL_LEN];
+int bigmem[ARRAY_SIZE];
 
-double get_diff_in_msec(struct timeval start, struct timeval stop)
-{
-    time_t sec_diff = stop.tv_sec - start.tv_sec;
-    int usec_diff = stop.tv_usec - start.tv_usec;
-    double total = (sec_diff * 1000.0) + (usec_diff / 1000.0);
-    return total;
+int rand_lim(int limit) {
+    int divisor = RAND_MAX/(limit+1);
+    int retval;
+
+    do { 
+        retval = rand() / divisor;
+    } while (retval > limit);
+
+    return retval;
 }
 
 int main()
 {
-  uint64_t pre, post, diff;
-  uint64_t i;
-  uint64_t j;
-  uint64_t current_ind = 0;
-  uint64_t prev_ind = 0;
+    uint64_t pre, post, diff;
+    uint64_t i;
+    uint64_t j;
+    uint64_t current_ind = 0;
+    uint64_t prev_ind = 0;
 
+    uint64_t measure_overhead = 0;
+    for(i = 0; i < NUM_LOOPS; i++){
+        CPUID;
+        RDTSC(pre);
+        RDTSC(post);
+        CPUID;
+        measure_overhead += (post-pre);
+    }
+    measure_overhead /= NUM_LOOPS;
+    printf("measurement overhead is %llu\n", measure_overhead);
+    //Warm up the cache
+    for(i = 0; i < ARRAY_SIZE; i++){
+        bigmem[i] = i;
+    }
+    int next;
+    uint64_t total = 0; 
+    for(i = 0; i < 1000; i++){
+        int index = rand_lim(ARRAY_SIZE);
+        CPUID;
+        RDTSC(pre);
+        bigmem[index];
+        RDTSCP(post);
+        CPUID;
+        diff = post - pre; 
+        total += diff;
+    }
+    printf("%llu\n", diff-measure_overhead*1000);
 
-  for (i = 0; i < NUM_PTRS; ++i)
-  {
-      current_ind = (current_ind + STRIDE_SIZE) % TOTAL_LEN;
-      bigmem[prev_ind] = &bigmem[current_ind];
-      prev_ind = current_ind;
-  }
-
-  void** current_spot = &bigmem[0];
-  for (i = 0; i < NUM_PTRS; ++i)
-  {
-      CPUID;
-      RDTSC(pre);
-      (*current_spot);
-      RDTSCP(post);
-      CPUID;
-      diff = post - pre;
-      printf("%llu\n", diff);
-  }
-
-  return 0;
+    return 0;
 }
