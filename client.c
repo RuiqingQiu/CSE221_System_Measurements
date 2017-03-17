@@ -37,23 +37,26 @@ int main(){
     RDTSCP(post);
     CPUID;
     clock_t stop = clock();
-    printf("%d\n", CLOCKS_PER_SEC);
     double elasped = (double)(stop - start) * 1000.0 /CLOCKS_PER_SEC;
-    printf("Time elapsed in ms : %f", elasped);
     printf("connection time: %llu cycles\n", post - pre);
+    printf("Connection time elapsed in ms : %f\n", elasped);
     
     /*---- Read the message from the server into the buffer ----*/
     recv(clientSocket, buffer, 1024, 0);
 
     /*---- Print the received message ----*/
-    printf("Data received: %s",buffer);   
+    //printf("Data received: %s",buffer);   
 
+    start = clock();
     CPUID;
     RDTSC(pre);
     close(clientSocket);
     RDTSCP(post);
     CPUID;
+    stop = clock();
+    elasped = (double)(stop - start) * 1000.0 /CLOCKS_PER_SEC;
     printf("tear down time: %llu cycles\n", post - pre);
+    printf("Tead down time elapsed in ms : %f\n", elasped);
 
     return 0;
 }
