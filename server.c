@@ -3,6 +3,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <time.h>
+#include <sys/time.h>
 #include "rds.h"
 
 #define BUF_SIZE 1024
@@ -12,6 +13,8 @@ int main(){
     struct sockaddr_in serverAddr;
     struct sockaddr_storage serverStorage;
     uint64_t pre, post;
+    struct timeval t1, t2;
+    double elapsedTime;
     socklen_t addr_size;
 
     /*---- Create the socket. The three arguments are: ----*/
@@ -45,16 +48,17 @@ int main(){
     {
         newSocket = accept(welcomeSocket, (struct sockaddr *) &serverStorage, &addr_size);
         printf("accept a connection\n");
+        gettimeofday(&t1, NULL);
         CPUID;
         RDTSC(pre);
-        clock_t start = clock();
         send(newSocket,buffer,BUF_SIZE,0);
         RDTSCP(post);
         CPUID;
-        clock_t stop = clock();
-        double elasped = (double)(stop - start) * 1000.0 /CLOCKS_PER_SEC;
+        gettimeofday(&t2, NULL);
+        elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+        elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
         printf("roundtrip time took %llu cycles\n", post - pre);
-        printf("roundtrip time took %f ms\n", elasped);
+        printf("roundtrip time took %f ms\n", elapsedTime);
         close(newSocket);
         sleep(1);
     }

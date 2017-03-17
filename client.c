@@ -3,6 +3,7 @@
 #include <netinet/in.h>
 #include <string.h>
 #include <time.h>
+#include <sys/time.h>
 #include "rds.h"
 
 int main(){
@@ -22,7 +23,8 @@ int main(){
     /* Set port number, using htons function to use proper byte order */
     serverAddr.sin_port = htons(7891);
     /* Set IP address to localhost */
-    serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    //serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    serverAddr.sin_addr.s_addr = inet_addr("100.81.39.82");
     /* Set all bits of the padding field to 0 */
     memset(serverAddr.sin_zero, '\0', sizeof serverAddr.sin_zero);  
 
@@ -30,33 +32,40 @@ int main(){
     addr_size = sizeof serverAddr;
 
 
-    clock_t start = clock();
+    struct timeval t1;
+    struct timeval t2;
+    double elapsedTime;
+    gettimeofday(&t1, NULL);
     CPUID;
     RDTSC(pre);
     connect(clientSocket, (struct sockaddr *) &serverAddr, addr_size);
     RDTSCP(post);
     CPUID;
     clock_t stop = clock();
-    double elasped = (double)(stop - start) * 1000.0 /CLOCKS_PER_SEC;
+    
+    gettimeofday(&t2, NULL);
+    elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+    elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
     printf("connection time: %llu cycles\n", post - pre);
-    printf("Connection time elapsed in ms : %f\n", elasped);
+    printf("Connection time elapsed in ms : %f\n", elapsedTime);
     
     /*---- Read the message from the server into the buffer ----*/
     recv(clientSocket, buffer, 1024, 0);
 
     /*---- Print the received message ----*/
-    //printf("Data received: %s",buffer);   
+    printf("Data received: %s",buffer);   
 
-    start = clock();
+    gettimeofday(&t1, NULL);
     CPUID;
     RDTSC(pre);
     close(clientSocket);
     RDTSCP(post);
     CPUID;
-    stop = clock();
-    elasped = (double)(stop - start) * 1000.0 /CLOCKS_PER_SEC;
+    gettimeofday(&t2, NULL);
+    elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+    elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
     printf("tear down time: %llu cycles\n", post - pre);
-    printf("Tead down time elapsed in ms : %f\n", elasped);
+    printf("Tead down time elapsed in ms : %f\n", elapsedTime);
 
     return 0;
 }
