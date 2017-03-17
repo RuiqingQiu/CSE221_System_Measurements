@@ -7,9 +7,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include "contention.h"
 
-#define FNAME_BUFSIZE 32
-#define READ_BUFSIZE 4096
+// FNAME_FORMAT, FNAME_BUFSIZE, and FILE_BUFISZE are defined in contention.h
 
 /*
  * This program is for determining the contention read time.
@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 {
 	int num_forks = 0;
 	int file_num = 0;
-	char read_buf[READ_BUFSIZE];
+	char read_buf[FILE_BUFSIZE];
 	char fname_buf[FNAME_BUFSIZE];
 	int fd = 0;
 	uint64_t pre = 0;
@@ -44,6 +44,7 @@ int main(int argc, char** argv)
 
 	while (num_forks > 0)
 	{
+		--num_forks;
 		file_num *= 2;
 		pid_t pid = fork();
 		if (pid)
@@ -52,7 +53,7 @@ int main(int argc, char** argv)
 			++file_num;
 		}
 	}
-	snprintf(fname_buf, FNAME_BUFSIZE, "block_file_%d.bk", file_num);
+	snprintf(fname_buf, FNAME_BUFSIZE, FNAME_FORMAT, file_num);
 
 	// Open the file
 	fd = open(fname_buf, O_RDONLY);
@@ -61,7 +62,7 @@ int main(int argc, char** argv)
 	CPUID;
 	RDTSC(pre);
 	// Read the file
-	read(fd, read_buf, READ_BUFSIZE);
+	read(fd, read_buf, FILE_BUFSIZE);
 	RDTSCP(post);
 	CPUID;
 	gettimeofday(&post_time, NULL);
