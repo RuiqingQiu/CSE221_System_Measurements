@@ -6,18 +6,27 @@
 #include <sys/time.h>
 #include "rds.h"
 #include "bw.h"
+#include <stdlib.h>
 
 // DATA_SIZE defined by bw.h
 
 int main(){
     int welcomeSocket, newSocket;
-    char buffer[DATA_SIZE];
+    char* buffer;
     struct sockaddr_in serverAddr;
     struct sockaddr_storage serverStorage;
     uint64_t pre, post;
     struct timeval t1, t2;
     double elapsedTime;
     socklen_t addr_size;
+
+    buffer = malloc(DATA_SIZE);
+    if (!buffer)
+    {
+      // buffer not initialized
+      fprintf(stderr, "Could not initialize buffer to be size %d. Got %x.\n", DATA_SIZE, buffer);
+      return 1;
+    }
 
     memset(buffer, 0, DATA_SIZE);
 
@@ -66,6 +75,7 @@ int main(){
         close(newSocket);
         sleep(1);
     }
+
 
     return 0;
 }

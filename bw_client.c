@@ -6,15 +6,23 @@
 #include <sys/time.h>
 #include "rds.h"
 #include "bw.h"
+#include <stdlib.h>
 
 // DATA_SIZE defined by bw.h
 
 int main(){
     uint64_t pre, post;
     int clientSocket;
-    char buffer[DATA_SIZE];
+    char* buffer;
     struct sockaddr_in serverAddr;
     socklen_t addr_size;
+
+    buffer = malloc(DATA_SIZE);
+    if (!buffer)
+    {
+      fprintf("Could not initialize buffer to size %d.\n", DATA_SIZE);
+      return 1;
+    }
 
     /*---- Create the socket. The three arguments are: ----*/
     /* 1) Internet domain 2) Stream socket 3) Default protocol (TCP in this case) */
@@ -26,8 +34,8 @@ int main(){
     /* Set port number, using htons function to use proper byte order */
     serverAddr.sin_port = htons(7891);
     /* Set IP address to localhost */
-    //serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-    serverAddr.sin_addr.s_addr = inet_addr("100.81.39.82");
+    serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    //serverAddr.sin_addr.s_addr = inet_addr("100.81.39.82");
     /* Set all bits of the padding field to 0 */
     memset(serverAddr.sin_zero, '\0', sizeof serverAddr.sin_zero);  
 
