@@ -3,13 +3,13 @@ ALL=jumper bw_server bw_client file_read make_file_size cartographer contentious
 
 all: $(ALL)
 
-contentious: contentious.c contention.h
+#contentious: contentious.c contention.h
 
-contentious_setup: contentious_setup.c contention.h
+#contentious_setup: contentious_setup.c contention.h
 
-bw_client: bw_client.c bw.h
+#bw_client: bw_client.c bw.h
 
-bw_server: bw_server.c bw.h
+#bw_server: bw_server.c bw.h
 
 clean: 
 	rm -f *.o a.out $(ALL) *.pf *.bk
