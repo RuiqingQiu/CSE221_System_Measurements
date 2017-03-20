@@ -40,6 +40,20 @@
 
 1. cartographer.c  (page fault latency)
 
+### Network experiments
+1. client_RTT.c server_RTT.c (roundtrip time and setup teardown time)
+
+1. bw_client.c bw_server.c (peak bandwidth)
+
+### File System experiments
+1. file_read.c (size of file cache)
+
+1. seq_read.c rand_read.c (file read time)
+
+1. seq_read_remote.c rand_read_remote.c (remote file read time)
+
+1. contentious.c (contention)
+
 ### Other
 1. run\_test.sh (convenience script for running a file multiple times)
 
