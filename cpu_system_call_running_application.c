@@ -27,12 +27,38 @@ int main()
 {
     uint64_t pre, post, diff;
 
+<<<<<<< HEAD
     CPUID;
     RDTSC(pre);
     getppid();
     RDTSCP(post);
     CPUID;
     printf("%llu\n", post - pre);
+=======
+   
+    for (int i = 0; i < 1000; i++) {
+
+        pid_t pid = fork();
+
+        if (pid == -1) {
+            printf("fork failed!\n");
+            exit(-1);
+        }
+        if (pid == 0) {
+            CPUID;
+            RDTSC(pre);
+            getpid();
+            RDTSCP(post);
+            CPUID;
+            printf("%llu\n", post - pre);
+
+            return 0;
+        } else {
+            wait(NULL);
+        }
+    }
+
+>>>>>>> 39274e48a9a02c1dccde4ef30a11b576773d2dfd
 
     return 0;
 }

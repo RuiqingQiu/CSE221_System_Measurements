@@ -5,6 +5,10 @@
 #include <sys/mman.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/time.h>
+/*
+    Function of the file: Measure page fault service time experiment
+*/
 
 // These variables are clobbered on every use of the RDTSC or RDTSCP macros
 static uint64_t _lo, _hi;
@@ -44,15 +48,22 @@ int main(int argc, char *argv[])
     int pagesize = getpagesize();
     int fd = 0;
     uint8_t * data_addr = NULL;
+    struct timeval t1,t2;
+    double elapsedTime;
 
     fd = open(OUR_FILE, O_RDWR);
     data_addr = mmap(0, pagesize, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
     CPUID;
     RDTSC(pre);
+    gettimeofday(&t1,NULL);
     data_addr[0] = 'a';
+    gettimeofday(&t2,NULL);
     RDTSCP(post);
     CPUID;
     diff = post - pre;
+    elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+    elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;
+    printf("elasedTime is %f\n in ms",elapsedTime); 
     printf("%llu\n", diff);
     aggregate += diff;
     munmap(data_addr, pagesize);

@@ -3,6 +3,10 @@
 #include <stdint.h>
 #include <time.h>
 
+/*
+  File function: measure RAM bandwidth experiment
+*/
+
 // These variables are clobbered on every use of the RDTSC or RDTSCP macros
 static uint64_t _lo, _hi;
 // Macro to make running the cpuid instruction easier
@@ -13,7 +17,7 @@ static uint64_t _lo, _hi;
 
 // roughly 1GB
 // May want to make this smaller. The output from running this program on my 
-// system is 5+GBs
+// system is 5+GBsc
 // The project description says you don't need to know the L1/2 cache sizes, 
 // but the lmbench paper mentions that this number is tuned based off of those 
 // cache sizes, so I'm going to say go with the lmbench paper.
@@ -67,9 +71,11 @@ int main()
   return 0;
   */
   start = clock();
-  for (i = 0; i < TOTAL_LEN; ++i)
+  for (i = 0; i < TOTAL_LEN; i+=2)
   {
       bigmem[i] = 17;
+      bigmem[i+1] = 17; // loop unrolling
+
   }
   stop = clock();
   write_diff = (stop-start)  - loop_time;
@@ -78,9 +84,10 @@ int main()
   uint64_t sum = 0;
 
   start = clock();
-  for (uint64_t i = 0; i < TOTAL_LEN; ++i)
+  for (uint64_t i = 0; i < TOTAL_LEN; i+=2)
   {
       sum = bigmem[i];
+      sum += bigmem[i + 1];
   }
 
   stop = clock();
