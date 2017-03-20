@@ -29,7 +29,7 @@ int main()
 
     CPUID;
     RDTSC(pre);
-    getpid();
+    getppid();
     RDTSCP(post);
     CPUID;
     printf("%llu\n", post - pre);

@@ -1,5 +1,5 @@
 CFLAGS=-O0 -lpthread -lm
-ALL=file_read make_file_size contentious contentious_setup seq_read rand_read
+ALL=file_read make_file_size contentious contentious_setup seq_read rand_read seq_read_remote rand_read_remote
 
 all: $(ALL)
 
