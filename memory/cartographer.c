@@ -6,6 +6,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/time.h>
+/*
+    Function of the file: Measure page fault service time experiment
+*/
 
 // These variables are clobbered on every use of the RDTSC or RDTSCP macros
 static uint64_t _lo, _hi;
@@ -60,7 +63,7 @@ int main(int argc, char *argv[])
     diff = post - pre;
     elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
     elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;
-    printf("elasedTime is %f\n in ms",elapsedTime);
+    printf("elasedTime is %f\n in ms",elapsedTime); 
     printf("%llu\n", diff);
     aggregate += diff;
     munmap(data_addr, pagesize);
