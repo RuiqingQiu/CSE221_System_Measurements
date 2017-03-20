@@ -71,10 +71,11 @@ int main()
   return 0;
   */
   start = clock();
-  for (i = 0; i < TOTAL_LEN; i+=2)
+  for (i = 0; i < TOTAL_LEN; i+=3)
   {
       bigmem[i] = 17;
       bigmen[i+1] = 17; // loop unrolling
+      bigmen[i+2] = 17;
 
   }
   stop = clock();
@@ -84,10 +85,11 @@ int main()
   uint64_t sum = 0;
 
   start = clock();
-  for (uint64_t i = 0; i < TOTAL_LEN; i+=2)
+  for (uint64_t i = 0; i < TOTAL_LEN; i+=3)
   {
       sum = bigmem[i];
       sum += bigmen[i + 1];
+      sum += bigment[i + 2];
   }
 
   stop = clock();
