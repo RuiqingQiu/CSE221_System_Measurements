@@ -56,7 +56,10 @@ int main(int argc, char** argv)
 	snprintf(fname_buf, FNAME_BUFSIZE, FNAME_FORMAT, file_num);
 
 	// Open the file
-	fd = open(fname_buf, O_RDONLY);
+	fd = open(fname_buf, O_RDONLY|O_SYNC);
+    if(fcntl(fd,F_NOCACHE,1) == -1){
+        printf("disable cache failed\n");
+    }
 
 	gettimeofday(&pre_time, NULL);
 	CPUID;
