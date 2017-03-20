@@ -35,6 +35,7 @@ int main(){
     serverAddr.sin_port = htons(7891);
     /* Set IP address to localhost */
     serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    //serverAddr.sin_addr.s_addr = inet_addr("192.168.1.101");
     //serverAddr.sin_addr.s_addr = inet_addr("100.81.39.82");
     /* Set all bits of the padding field to 0 */
     memset(serverAddr.sin_zero, '\0', sizeof serverAddr.sin_zero);  
@@ -48,11 +49,12 @@ int main(){
     double elapsedTime;
     connect(clientSocket, (struct sockaddr *) &serverAddr, addr_size);
 
+    int total = 0;
     /*---- Read the message from the server into the buffer ----*/
     gettimeofday(&t1, NULL);
     CPUID;
     RDTSC(pre);
-    recv(clientSocket, buffer, DATA_SIZE, 0);
+    recv(clientSocket, buffer, DATA_SIZE, 0); 
     RDTSCP(post);
     CPUID;
     gettimeofday(&t2, NULL);
@@ -62,7 +64,6 @@ int main(){
     printf("Time elapsed: %f\n", elapsedTime);
     double avg_bw = DATA_SIZE * 8.0 / elapsedTime;
     printf("Average bandwidth: %f bit/s\n", avg_bw);
-
     close(clientSocket);
 
     return 0;

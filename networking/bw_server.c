@@ -63,7 +63,7 @@ int main(){
         gettimeofday(&t1, NULL);
         CPUID;
         RDTSC(pre);
-        send(newSocket,buffer,DATA_SIZE,0);
+        printf("%d\n",send(newSocket,buffer,DATA_SIZE,0));
         RDTSCP(post);
         CPUID;
         gettimeofday(&t2, NULL);

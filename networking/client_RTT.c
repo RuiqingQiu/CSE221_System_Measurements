@@ -26,7 +26,9 @@ int main(){
     serverAddr.sin_port = htons(7891);
     /* Set IP address to localhost */
     
-    serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    //serverAddr.sin_addr.s_addr = inet_addr("127.0.0.1");
+    //serverAddr.sin_addr.s_addr = inet_addr("10.160.21.140");
+    serverAddr.sin_addr.s_addr = inet_addr("192.168.1.101");
     //serverAddr.sin_addr.s_addr = inet_addr("100.81.39.82");
     /* Set all bits of the padding field to 0 */
     memset(serverAddr.sin_zero, '\0', sizeof serverAddr.sin_zero);  
@@ -68,12 +70,12 @@ int main(){
         printf("Round trip : %llu cycles\n", post - pre);
         printf("Round trip time elapsed in ms : %f\n", elapsedTime);
         totalTime += elapsedTime;
-        totalCycle += (post-pre);
+        totalCycle += (double)(post-pre) / NUM_OF_EXPERIMENT;
     }
 
     totalTime = totalTime / NUM_OF_EXPERIMENT;
-    totalCycle = totalCycle / NUM_OF_EXPERIMENT;
-    printf("Averaged round trip : %llu cycles\n", totalCycle);
+    //totalCycle = totalCycle / NUM_OF_EXPERIMENT;
+    printf("Averaged round trip : %f cycles\n", totalCycle);
     printf("Averaged Round trip time elapsed in ms : %f\n", totalTime);
     
     close(clientSocket);
