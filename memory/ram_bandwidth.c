@@ -70,29 +70,36 @@ int main()
   printf("%lu\n",avg_loop);
   return 0;
   */
-  start = clock();
-  for (i = 0; i < TOTAL_LEN; i+=2)
+  struct timeval t1, t2;
+  double elapsedTime = 0.0;
+  gettimeofday(&t1, NULL);
+  for (i = 0; i < TOTAL_LEN; i+=3)
   {
       bigmem[i] = 17;
       bigmem[i+1] = 17; // loop unrolling
+      bigmem[i+2] = 17;
 
   }
-  stop = clock();
-  write_diff = (stop-start)  - loop_time;
-  write_ratio = (double) TOTAL_LEN / write_diff;
+  gettimeofday(&t2, NULL);
+  elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+  elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
+  write_ratio = (double) TOTAL_LEN / elapsedTime;
   printf("Write byte/msec:\n%f\n", write_ratio);
   uint64_t sum = 0;
 
-  start = clock();
-  for (uint64_t i = 0; i < TOTAL_LEN; i+=2)
+  gettimeofday(&t1, NULL);
+  for (uint64_t i = 0; i < TOTAL_LEN; i+=3)
   {
       sum = bigmem[i];
       sum += bigmem[i + 1];
+      sum += bigmem[i + 2];
   }
+  gettimeofday(&t2, NULL);
+  elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000.0;      // sec to ms
+  elapsedTime += (t2.tv_usec - t1.tv_usec) / 1000.0;   // us to ms
 
-  stop = clock();
   read_diff = (stop-start)  - loop_time;
-  read_ratio = TOTAL_LEN / read_diff;
+  read_ratio = TOTAL_LEN / elapsedTime;
   printf("Read byte/msec:\n%f\n", read_ratio);
   return 0;
 }

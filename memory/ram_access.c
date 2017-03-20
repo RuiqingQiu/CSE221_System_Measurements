@@ -53,6 +53,8 @@ double cacheAccessTime(int size, int strideLength)
     length = strideLength / 4;   
     num = size * 1024 / 4;
     int index;
+    
+    // warm the cache
     A[0] = 0;
     for (int i = 0; i < num; i++) {
         index = i + length;
